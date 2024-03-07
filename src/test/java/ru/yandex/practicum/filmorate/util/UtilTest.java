@@ -39,10 +39,10 @@ class UtilTest {
 
   @Test
   void validateEmail() throws ValidationException {
-    String Email = "username@domain.com";
+    String email = "username@domain.com";
     String wrongEmail1 = "";
     String wrongEmail2 = "usernamedomain.com";
-    assertEquals(Util.validateEmail(Email), Email);
+    assertEquals(Util.validateEmail(email), email);
     assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail1));
     assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail2));
   }
