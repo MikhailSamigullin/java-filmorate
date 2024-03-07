@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.ApiError;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,36 +21,36 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@RequestMapping("films")
-public class FilmController {
-  private final ArrayList<Film> films = new ArrayList<>();
+@RequestMapping("users")
+public class UserController {
+  private final ArrayList<User> users = new ArrayList<>();
 
   @GetMapping
-  public ArrayList<Film> findAll() {
-    return films;
+  public ArrayList<User> findAll() {
+    return users;
   }
 
   @PostMapping
-  public Film create(@RequestBody Film film) {
-    films.add(film);
-    return film;
+  public User create(@RequestBody User user) {
+    users.add(user);
+    return user;
   }
 
   @PutMapping
-  public Film update(@RequestBody Film film) {
-    Optional<Film> filteredFilm = films.stream().filter(item -> item.getId() == film.getId()).findFirst();
+  public User update(@RequestBody User user) {
+    Optional<User> filteredFilm = users.stream().filter(item -> item.getId() == user.getId()).findFirst();
     filteredFilm.ifPresent(value -> {
-      film.setId(value.getId());
-      films.remove(value);
-      films.add(film);
+      user.setId(value.getId());
+      users.remove(value);
+      users.add(user);
     });
-    return film;
+    return user;
   }
 
   @ExceptionHandler({ ValidationException.class })
   public ResponseEntity<Object> handleException(
           ValidationException ex) {
-    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), "/films", ex.getLocalizedMessage(), LocalDateTime.now());
+    ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), "/users", ex.getLocalizedMessage(), LocalDateTime.now());
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
