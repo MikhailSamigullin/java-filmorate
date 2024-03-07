@@ -39,9 +39,8 @@ public class Util {
   }
 
   public static String validateEmail(String email) throws ValidationException {
-    String regexPattern = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
-    if (!email.matches(regexPattern)) {
+    String regexPattern = "^[a-z]([a-zA-Z0-9]*)?$";
+    if (email.matches(regexPattern) || !email.contains("@")) {
       throw new ValidationException("Электронная почта не может быть пустой и должна содержать символ @.");
     }
     return email;

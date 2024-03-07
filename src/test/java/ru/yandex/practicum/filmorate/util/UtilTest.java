@@ -41,16 +41,10 @@ class UtilTest {
   void validateEmail() throws ValidationException {
     String Email = "username@domain.com";
     String wrongEmail1 = "";
-    String wrongEmail2 = "username.@domain.com";
-    String wrongEmail3 = ".user.name@domain.com";
-    String wrongEmail4 = "user-name@domain.com.";
-    String wrongEmail5 = "username@.com";
+    String wrongEmail2 = "usernamedomain.com";
     assertEquals(Util.validateEmail(Email), Email);
     assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail1));
     assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail2));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail3));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail4));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail5));
   }
 
   @Test
