@@ -18,15 +18,16 @@ public class User {
   private int id;
   private final String email;
   private final String login;
-  private final String name;
+  private String name;
   private final LocalDate birthday;
 
-  public User(String email, String login, String name, LocalDate birthday) throws ValidationException {
-    this.id = counter;
+  public User(int id, String email, String login, String name, LocalDate birthday) throws ValidationException {
+    this.id = Util.validateId(id, counter);
     this.email = Util.validateEmail(email);
     this.login = Util.validateLogin(login);
     this.name = Util.validateName(name, login);
     this.birthday = Util.validateBirthday(birthday);
     counter++;
   }
+
 }

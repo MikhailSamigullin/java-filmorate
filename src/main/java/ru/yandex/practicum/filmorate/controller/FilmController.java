@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.ApiError;
+import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
@@ -37,13 +38,16 @@ public class FilmController {
   }
 
   @PutMapping
-  public Film update(@RequestBody Film film) {
+  public Film update(@RequestBody Film film) throws NotExistsException {
     Optional<Film> filteredFilm = films.stream().filter(item -> item.getId() == film.getId()).findFirst();
     filteredFilm.ifPresent(value -> {
       film.setId(value.getId());
       films.remove(value);
       films.add(film);
     });
+    if (filteredFilm.isEmpty()) {
+      throw new NotExistsException("Такого id не существует.");
+    }
     return film;
   }
 

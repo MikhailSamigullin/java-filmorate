@@ -7,6 +7,16 @@ import java.time.format.DateTimeFormatter;
 
 public class Util {
 
+  public static int validateId(int id, int counter) throws ValidationException {
+    if (id > counter) {
+      throw new ValidationException("Такого id не существует.");
+    }
+    if (id == 0) {
+      return counter;
+    }
+    return id;
+  }
+
   public static DateTimeFormatter SHORT_DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
   public static String validateFilmName(String name) throws ValidationException {
@@ -48,7 +58,7 @@ public class Util {
   }
 
   public static String validateName(String name, String login) {
-    if (name.isEmpty()) {
+    if (name == null || name.isEmpty()) {
       return login;
     }
     return name;

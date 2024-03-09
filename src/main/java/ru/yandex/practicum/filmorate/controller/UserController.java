@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.ApiError;
+import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -37,13 +38,18 @@ public class UserController {
   }
 
   @PutMapping
-  public User update(@RequestBody User user) {
-    Optional<User> filteredFilm = users.stream().filter(item -> item.getId() == user.getId()).findFirst();
-    filteredFilm.ifPresent(value -> {
+  public User update(@RequestBody User user) throws NotExistsException {
+    System.out.println(users);
+    Optional<User> filteredUser = users.stream().filter(item -> item.getId() == user.getId()).findFirst();
+    filteredUser.ifPresent(value -> {
+      System.out.println(value);
       user.setId(value.getId());
       users.remove(value);
       users.add(user);
     });
+    if (filteredUser.isEmpty()) {
+      throw new NotExistsException("Такого id не существует.");
+    }
     return user;
   }
 
