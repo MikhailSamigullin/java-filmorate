@@ -24,7 +24,7 @@ public class Film {
   private final LocalDate releaseDate;
   private final int duration;
 
-  public Film(int id , String name, String description, LocalDate releaseDate, int duration) throws ValidationException {
+  public Film(int id, String name, String description, LocalDate releaseDate, int duration) throws ValidationException {
     this.id = Util.validateId(id, counter);
     this.name = validateFilmName(name);
     this.description = validateDescription(description);
