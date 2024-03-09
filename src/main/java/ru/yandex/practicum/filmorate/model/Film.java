@@ -17,7 +17,7 @@ import static ru.yandex.practicum.filmorate.util.Util.*;
 @ToString
 public class Film {
   // После подключения БД, counter будет удален и id будет генерироваться в ней.
-  private static int counter;
+  private static int counter = 1;
   private int id;
   private final String name;
   private final String description;

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode
 @ToString
 public class User {
-  private static int counter;
+  private static int counter = 1;
   private int id;
   private final String email;
   private final String login;
