@@ -1,82 +1,31 @@
 package ru.yandex.practicum.filmorate.util;
 
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+import ru.yandex.practicum.filmorate.model.User;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class UtilTest {
 
   @Test
-  void validateFilmName() throws ValidationException {
-    assertEquals(Util.validateFilmName("Film name"), "Film name");
-    assertThrows(ValidationException.class, () -> Util.validateFilmName(""));
+  void findMaxId() {
+    int expectedMaxId = 1;
+    User user1 = new User(0, "mail@mail.ru", "dolore", "Nick Name", LocalDate.of(1946, 8, 20));
+    User user2 = new User(1, "mail@mail.ru", "dolore", "Nick Name", LocalDate.of(1946, 8, 20));
+    HashMap<Integer, User> users = new HashMap<>();
+    users.put(0, user1);
+    users.put(1, user2);
+    assertEquals(expectedMaxId, Util.findMaxId(users.keySet()));
   }
 
   @Test
-  void validateDescription() throws ValidationException {
-    assertEquals(Util.validateDescription("Film description"), "Film description");
-    assertThrows(ValidationException.class, () -> Util.validateDescription("Film description Film description Film description Film description " +
-            "Film description Film description Film description Film description Film description " +
-            "Film description Film description Film description Film description Film description "));
+  void findMaxIdInEmptySet() {
+    int expectedMaxId = 0;
+    HashMap<Integer, User> users = new HashMap<>();
+    assertEquals(expectedMaxId, Util.findMaxId(users.keySet()));
   }
 
-  @Test
-  void validateReleaseDate() throws ValidationException {
-    LocalDate date = LocalDate.parse("2024-01-01", Util.SHORT_DATE_FORMAT);
-    LocalDate invalidDate = LocalDate.parse("1895-12-27", Util.SHORT_DATE_FORMAT);
-    assertEquals(Util.validateReleaseDate(date), date);
-    assertThrows(ValidationException.class, () -> Util.validateReleaseDate(invalidDate));
-  }
-
-  @Test
-  void validateDuration() throws ValidationException {
-    assertEquals(Util.validateDuration(100), 100);
-    assertThrows(ValidationException.class, () -> Util.validateDuration(-100));
-  }
-
-  @Test
-  void validateEmail() throws ValidationException {
-    String email = "username@domain.com";
-    String wrongEmail1 = "";
-    String wrongEmail2 = "username/@domain.com";
-    String wrongEmail3 = ".user.name@domain.com";
-    String wrongEmail4 = "user-name@domain.com.";
-    String wrongEmail5 = "username@.com";
-    assertEquals(Util.validateEmail(email), email);
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail1));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail2));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail3));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail4));
-    assertThrows(ValidationException.class, () -> Util.validateEmail(wrongEmail5));
-  }
-
-  @Test
-  void validateName() {
-    String name = "Name";
-    String emptyName = "";
-    String login = "Login";
-    assertEquals(Util.validateName(name, login), name);
-    assertEquals(Util.validateName(emptyName, login), login);
-  }
-
-  @Test
-  void validateLogin() throws ValidationException {
-    String emptyLogin = "";
-    String login = "Login";
-    String loginWithSpace = "Log in";
-    assertEquals(Util.validateLogin(login), login);
-    assertThrows(ValidationException.class, () -> Util.validateLogin(emptyLogin));
-    assertThrows(ValidationException.class, () -> Util.validateLogin(loginWithSpace));
-  }
-
-  @Test
-  void validateBirthday() throws ValidationException {
-    LocalDate date = LocalDate.parse("2024-01-01", Util.SHORT_DATE_FORMAT);
-    LocalDate invalidDate = LocalDate.parse("2100-12-27", Util.SHORT_DATE_FORMAT);
-    assertEquals(Util.validateBirthday(date), date);
-    assertThrows(ValidationException.class, () -> Util.validateBirthday(invalidDate));
-  }
 }
