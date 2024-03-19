@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.util.Util;
 
 import javax.validation.Valid;
@@ -16,31 +16,34 @@ import java.util.HashMap;
 
 @RestController
 @Slf4j
-@RequestMapping("films")
-public class FilmController {
-  private final HashMap<Integer, Film> films = new HashMap<>();
+@RequestMapping("users")
+public class UserController {
+  private final HashMap<Integer, User> users = new HashMap<>();
 
   @GetMapping
-  public ArrayList<Film> findAll() {
-    return new ArrayList<>(films.values());
+  public ArrayList<User> findAll() {
+    return new ArrayList<>(users.values());
   }
 
   @PostMapping
-  public Film create(@Valid @RequestBody Film film) {
-    int id = Util.findMaxId(films.keySet()) + 1;
-    film.setId(id);
-    films.put(id, film);
-    return film;
+  public User create(@Valid @RequestBody User user) {
+    int id = Util.findMaxId(users.keySet()) + 1;
+    if (user.getName() == null || user.getName().isEmpty()) {
+      user.setName(user.getLogin());
+    }
+    user.setId(id);
+    users.put(id, user);
+    return user;
   }
 
   @PutMapping
-  public Film update(@Valid @RequestBody Film film) {
-    if (films.containsKey(film.getId())) {
-      films.put(film.getId(), film);
+  public User update(@Valid @RequestBody User user) {
+    if (users.containsKey(user.getId())) {
+      users.put(user.getId(), user);
     } else {
       throw new RuntimeException("Такого id не существует.");
     }
-    return film;
+    return user;
   }
 
 }
