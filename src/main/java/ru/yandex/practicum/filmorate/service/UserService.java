@@ -33,7 +33,8 @@ public class UserService {
   }
 
   public ArrayList<User> findCommonFriends(int id, int otherId) {
-    checkUserId(id, otherId);
+    checkUserId(id);
+    checkUserId(otherId);
     Set<Integer> firstUserFriends = inMemoryUserStorage.users.get(id).getFriends();
     Set<Integer> secondUserFriends = inMemoryUserStorage.users.get(otherId).getFriends();
     ArrayList<User> commonFriends = new ArrayList<>();
@@ -60,14 +61,16 @@ public class UserService {
   }
 
   public User addFriend(int id, int friendId) {
-    checkUserId(id, friendId);
+    checkUserId(id);
+    checkUserId(friendId);
     inMemoryUserStorage.users.get(id).getFriends().add(friendId);
     inMemoryUserStorage.users.get(friendId).getFriends().add(id);
     return inMemoryUserStorage.users.get(id);
   }
 
   public User deleteFriend(int id, int friendId) {
-    checkUserId(id, friendId);
+    checkUserId(id);
+    checkUserId(friendId);
     User user = inMemoryUserStorage.users.get(id);
     User friend = inMemoryUserStorage.users.get(friendId);
     user.getFriends().remove(friendId);
@@ -84,13 +87,7 @@ public class UserService {
 
   private void checkUserId(int id) {
     if (!inMemoryUserStorage.users.containsKey(id)) {
-      throw new NotExistsException("Такого id не существует.");
-    }
-  }
-
-  private void checkUserId(int id, int otherId) {
-    if (!inMemoryUserStorage.users.containsKey(id) || !inMemoryUserStorage.users.containsKey(otherId)) {
-      throw new RuntimeException("Такого id не существует.");
+      throw new NotExistsException("Такого id пользователя не существует.");
     }
   }
 }

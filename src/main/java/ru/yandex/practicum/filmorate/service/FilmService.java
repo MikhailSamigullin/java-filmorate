@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.util.Util;
 
 import java.util.ArrayList;
@@ -13,9 +14,11 @@ import java.util.stream.Collectors;
 @Service
 public class FilmService {
   private final InMemoryFilmStorage inMemoryFilmStorage;
+  private final InMemoryUserStorage inMemoryUserStorage;
 
-  public FilmService(InMemoryFilmStorage inMemoryFilmStorage) {
+  public FilmService(InMemoryFilmStorage inMemoryFilmStorage, InMemoryUserStorage inMemoryUserStorage) {
     this.inMemoryFilmStorage = inMemoryFilmStorage;
+    this.inMemoryUserStorage = inMemoryUserStorage;
   }
 
   public ArrayList<Film> findAll() {
@@ -46,12 +49,14 @@ public class FilmService {
 
   public Film addLike(int id, int userId) {
     checkFilmId(id);
+    checkUserId(userId);
     inMemoryFilmStorage.films.get(id).getLikes().add(userId);
     return inMemoryFilmStorage.films.get(id);
   }
 
   public Film deleteLike(int id, int userId) {
     checkFilmId(id);
+    checkUserId(userId);
     Film film = inMemoryFilmStorage.films.get(id);
     film.getLikes().remove(userId);
     return film;
@@ -59,7 +64,13 @@ public class FilmService {
 
   private void checkFilmId(int id) {
     if (!inMemoryFilmStorage.films.containsKey(id)) {
-      throw new NotExistsException("Такого id не существует.");
+      throw new NotExistsException("Такого id фильма не существует.");
+    }
+  }
+
+  private void checkUserId(int id) {
+    if (!inMemoryUserStorage.users.containsKey(id)) {
+      throw new NotExistsException("Такого id пользователя не существует.");
     }
   }
 }
