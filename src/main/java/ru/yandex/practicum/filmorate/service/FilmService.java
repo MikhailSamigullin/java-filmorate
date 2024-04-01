@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.util.Util;
@@ -58,7 +59,7 @@ public class FilmService {
 
   private void checkFilmId(int id) {
     if (!inMemoryFilmStorage.films.containsKey(id)) {
-      throw new RuntimeException("Такого id не существует.");
+      throw new NotExistsException("Такого id не существует.");
     }
   }
 }

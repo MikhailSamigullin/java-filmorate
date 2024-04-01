@@ -21,7 +21,7 @@ import java.util.Map;
 public class ControllerExceptionHandler {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ExceptionHandler(value = {MethodArgumentNotValidException.class})
   public ResponseEntity<Object> handleValidationExceptions(
           MethodArgumentNotValidException exception, HttpServletRequest request) {
     Map<String, String> errors = new HashMap<>();

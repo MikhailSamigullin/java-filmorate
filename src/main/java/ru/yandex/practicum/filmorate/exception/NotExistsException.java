@@ -1,7 +1,12 @@
 package ru.yandex.practicum.filmorate.exception;
 
-import lombok.experimental.StandardException;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@StandardException
-public class NotExistsException extends Exception {
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+
+public class NotExistsException extends RuntimeException {
+  public NotExistsException(String message) {
+    super(message);
+  }
 }

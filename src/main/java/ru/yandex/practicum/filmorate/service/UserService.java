@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.util.Util;
@@ -21,13 +22,22 @@ public class UserService {
   }
 
   public User findById(int id) {
-    checkUserId(id);
+    try {
+      checkUserId(id);
+          } catch (NotExistsException e) {
+      System.out.println(e.getMessage());
+    }
     return inMemoryUserStorage.users.get(id);
   }
 
   public ArrayList<User> findFriendsByUserId(int id) {
-    checkUserId(id);
+    try {
+      checkUserId(id);
+    } catch (NotExistsException e) {
+      System.out.println(e.getMessage());
+    }
     return findFriends(id);
+
   }
 
   public ArrayList<User> findCommonFriends(int id, int otherId) {
@@ -82,7 +92,7 @@ public class UserService {
 
   private void checkUserId(int id) {
     if (!inMemoryUserStorage.users.containsKey(id)) {
-      throw new RuntimeException("Такого id не существует.");
+      throw new NotExistsException("Такого id не существует.");
     }
   }
 
