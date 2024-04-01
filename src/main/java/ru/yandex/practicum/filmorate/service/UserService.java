@@ -22,20 +22,12 @@ public class UserService {
   }
 
   public User findById(int id) {
-    try {
-      checkUserId(id);
-          } catch (NotExistsException e) {
-      System.out.println(e.getMessage());
-    }
+    checkUserId(id);
     return inMemoryUserStorage.users.get(id);
   }
 
   public ArrayList<User> findFriendsByUserId(int id) {
-    try {
-      checkUserId(id);
-    } catch (NotExistsException e) {
-      System.out.println(e.getMessage());
-    }
+    checkUserId(id);
     return findFriends(id);
 
   }

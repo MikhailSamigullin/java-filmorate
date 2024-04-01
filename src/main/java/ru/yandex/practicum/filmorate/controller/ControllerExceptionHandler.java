@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.util.ApiError;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,18 @@ public class ControllerExceptionHandler {
     });
     log.info("Получен запрос к эндпоинту:  \"" + request.getRequestURI() + "\", ошибки: " + exception.getFieldErrors());
     ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST.value(), request.getRequestURI(), HttpStatus.BAD_REQUEST.getReasonPhrase(), errors, LocalDateTime.now());
+    return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+  }
+
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(value = {NotExistsException.class})
+  public ResponseEntity<Object> handleValidationExceptions2(
+          RuntimeException exception, HttpServletRequest request) {
+    Map<String, String> errors = new HashMap<>();
+    String errorMessage = exception.getMessage();
+    errors.put("id", errorMessage);
+    log.info("Получен запрос к эндпоинту:  \"" + request.getRequestURI() + "\", ошибка: " + exception.getMessage());
+    ApiError apiError = new ApiError(HttpStatus.NOT_FOUND.value(), request.getRequestURI(), HttpStatus.NOT_FOUND.getReasonPhrase(), errors, LocalDateTime.now());
     return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
   }
 
