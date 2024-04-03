@@ -1,76 +1,50 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exception.NotExistsException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
-import ru.yandex.practicum.filmorate.util.Util;
+import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Service
 public class FilmService {
-  private final InMemoryFilmStorage inMemoryFilmStorage;
-  private final InMemoryUserStorage inMemoryUserStorage;
+  private final FilmStorage filmStorage;
+  private final UserStorage userStorage;
 
-  public FilmService(InMemoryFilmStorage inMemoryFilmStorage, InMemoryUserStorage inMemoryUserStorage) {
-    this.inMemoryFilmStorage = inMemoryFilmStorage;
-    this.inMemoryUserStorage = inMemoryUserStorage;
+  public FilmService(FilmStorage filmStorage, UserStorage userStorage) {
+    this.filmStorage = filmStorage;
+    this.userStorage = userStorage;
   }
 
   public ArrayList<Film> findAll() {
-    return new ArrayList<>(inMemoryFilmStorage.films.values());
+    return filmStorage.findAll();
   }
 
   public ArrayList<Film> findTopFilms(String count) {
     int filmCount = count.matches("\\d+") ? Integer.parseInt(count) : 10;
-    return inMemoryFilmStorage.films.values()
-            .stream()
-            .sorted(Comparator.comparing(film -> film.getLikes().size(), Comparator.reverseOrder()))
-            .limit(filmCount)
-            .collect(Collectors.toCollection(ArrayList::new));
+    return filmStorage.findTopFilms(String.valueOf(filmCount));
   }
 
   public Film create(Film film) {
-    int id = Util.findMaxId(inMemoryFilmStorage.films.keySet()) + 1;
-    film.setId(id);
-    inMemoryFilmStorage.films.put(id, film);
-    return film;
+    return filmStorage.add(film);
   }
 
   public Film update(Film film) {
-    checkFilmId(film.getId());
-    inMemoryFilmStorage.films.put(film.getId(), film);
-    return film;
+    filmStorage.checkFilmId(film);
+    return filmStorage.update(film);
   }
 
   public Film addLike(int id, int userId) {
-    checkFilmId(id);
-    checkUserId(userId);
-    inMemoryFilmStorage.films.get(id).getLikes().add(userId);
-    return inMemoryFilmStorage.films.get(id);
+    filmStorage.checkFilmId(id);
+    userStorage.checkUserId(userId);
+    return filmStorage.addLike(id, userId);
   }
 
   public Film deleteLike(int id, int userId) {
-    checkFilmId(id);
-    checkUserId(userId);
-    Film film = inMemoryFilmStorage.films.get(id);
-    film.getLikes().remove(userId);
-    return film;
+    filmStorage.checkFilmId(id);
+    userStorage.checkUserId(userId);
+    return filmStorage.removeLike(id, userId);
   }
 
-  private void checkFilmId(int id) {
-    if (!inMemoryFilmStorage.films.containsKey(id)) {
-      throw new NotExistsException("Такого id фильма не существует.");
-    }
-  }
-
-  private void checkUserId(int id) {
-    if (!inMemoryUserStorage.users.containsKey(id)) {
-      throw new NotExistsException("Такого id пользователя не существует.");
-    }
-  }
 }
