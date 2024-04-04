@@ -23,7 +23,7 @@ public class FilmService {
 
   public ArrayList<Film> findTopFilms(String count) {
     int filmCount = count.matches("\\d+") ? Integer.parseInt(count) : 10;
-    return filmStorage.findTopFilms(String.valueOf(filmCount));
+    return filmStorage.findTopFilms(filmCount);
   }
 
   public Film create(Film film) {
@@ -31,7 +31,7 @@ public class FilmService {
   }
 
   public Film update(Film film) {
-    filmStorage.checkFilmId(film);
+    filmStorage.checkFilmId(film.getId());
     return filmStorage.update(film);
   }
 

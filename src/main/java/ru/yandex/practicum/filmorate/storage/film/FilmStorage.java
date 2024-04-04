@@ -12,13 +12,11 @@ public interface FilmStorage {
 
   ArrayList<Film> findAll();
 
-  ArrayList<Film> findTopFilms(String count);
+  ArrayList<Film> findTopFilms(int count);
 
   Film addLike(int id, int userId);
 
   Film removeLike(int id, int userId);
-
-  void checkFilmId(Film film);
 
   void checkFilmId(int id);
 }

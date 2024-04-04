@@ -34,8 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage {
   }
 
   @Override
-  public ArrayList<Film> findTopFilms(String count) {
-    int filmCount = count.matches("\\d+") ? Integer.parseInt(count) : 10;
+  public ArrayList<Film> findTopFilms(int filmCount) {
     return films.values()
             .stream()
             .sorted(Comparator.comparing(film -> film.getLikes().size(), Comparator.reverseOrder()))
@@ -51,16 +50,9 @@ public class InMemoryFilmStorage implements FilmStorage {
 
   @Override
   public Film removeLike(int id, int userId) {
-    Film film = films.get(id);
+    Film film = getFilm(id);
     film.getLikes().remove(userId);
     return film;
-  }
-
-  @Override
-  public void checkFilmId(Film film) {
-    if (!films.containsKey(film.getId())) {
-      throw new NotExistsException("Такого id фильма не существует.");
-    }
   }
 
   @Override
@@ -68,6 +60,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     if (!films.containsKey(id)) {
       throw new NotExistsException("Такого id фильма не существует.");
     }
+  }
+
+  private Film getFilm(int id) {
+    if (!films.containsKey(id)) {
+      throw new NotExistsException("Такого id фильма не существует.");
+    }
+    return films.get(id);
   }
 
 }
