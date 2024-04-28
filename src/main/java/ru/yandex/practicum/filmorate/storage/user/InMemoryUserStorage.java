@@ -7,6 +7,7 @@ import ru.yandex.practicum.filmorate.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Set;
 
 @Component
@@ -19,9 +20,9 @@ public class InMemoryUserStorage implements UserStorage {
   }
 
   @Override
-    public User findById(int id) {
+    public Optional<User> findById(int id) {
     checkUserId(id);
-    return users.get(id);
+    return Optional.ofNullable(users.get(id));
   }
 
   @Override
@@ -61,6 +62,11 @@ public class InMemoryUserStorage implements UserStorage {
     }
     users.put(user.getId(), user);
     return user;
+  }
+
+  @Override
+  public boolean delete(int id) {
+    return false;
   }
 
   @Override
