@@ -30,7 +30,7 @@ public class UserService {
     return userDao.findFriends(id);
   }
 
-  public ArrayList<Follower>findCommonFriends(int id, int otherId) {
+  public ArrayList<Follower> findCommonFriends(int id, int otherId) {
     userDao.findUserById(String.valueOf(id));
     userDao.findUserById(String.valueOf(otherId));
     return userDao.findCommonFriends(id, otherId);
