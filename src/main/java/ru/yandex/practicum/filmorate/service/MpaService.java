@@ -20,7 +20,7 @@ public class MpaService {
   }
 
   public Optional<Mpa> findById(int id) {
-    return mpaDao.findById(id);
+    return mpaDao.findById404(id);
   }
 
   public Optional<Mpa> create(Mpa mpa) {

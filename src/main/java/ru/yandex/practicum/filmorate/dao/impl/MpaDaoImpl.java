@@ -5,6 +5,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dao.MpaDao;
 import ru.yandex.practicum.filmorate.exception.NotExistsException;
+import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.ArrayList;
@@ -19,7 +20,15 @@ public class MpaDaoImpl implements MpaDao {
   }
 
   @Override
-  public Optional<Mpa> findById(int id) {
+  public void findById400(int id) {
+    SqlRowSet mpaRow = jdbcTemplate.queryForRowSet("select * from AGE_RATING where AGE_RATING_ID = ?;", id);
+    if (!mpaRow.next()) {
+      throw new ValidationException("Такого id рейтинга не существует.");
+    }
+  }
+
+  @Override
+  public Optional<Mpa> findById404(int id) {
     SqlRowSet mpaRow = jdbcTemplate.queryForRowSet("select * from AGE_RATING where AGE_RATING_ID = ?;", id);
     if (!mpaRow.next()) {
       throw new NotExistsException("Такого id рейтинга не существует.");
@@ -53,7 +62,7 @@ public class MpaDaoImpl implements MpaDao {
 
   @Override
   public Optional<Mpa> update(Mpa mpa) {
-    findById(mpa.getId());
+    findById404(mpa.getId());
     Mpa newMpa;
     SqlRowSet mpaRow = jdbcTemplate.queryForRowSet(
             "SELECT * FROM final table (update AGE_RATING set NAME = ? where AGE_RATING_ID = ?);",

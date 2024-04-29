@@ -35,7 +35,7 @@ public class FilmService {
   }
 
   public Optional<Film> create(Film film) {
-    mpaDao.findById(film.getMpa().getId());
+    mpaDao.findById400(film.getMpa().getId());
     return filmDao.create(film);
   }
 
