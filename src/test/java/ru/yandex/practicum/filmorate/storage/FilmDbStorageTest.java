@@ -7,7 +7,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
-import ru.yandex.practicum.filmorate.dao.MpaDao;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
@@ -22,19 +21,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class FilmDbStorageTest {
   private final FilmDao filmStorage;
-  private final MpaDao mpaStorage;
   private Mpa mpa;
 
   @Autowired
-  FilmDbStorageTest(FilmDao filmStorage, MpaDao mpaStorage) {
+  FilmDbStorageTest(FilmDao filmStorage) {
     this.filmStorage = filmStorage;
-    this.mpaStorage = mpaStorage;
   }
 
   @BeforeEach
   void setUp() {
     mpa = new Mpa(1, "qwewe");
-    mpaStorage.create(mpa);
   }
 
   @Test
