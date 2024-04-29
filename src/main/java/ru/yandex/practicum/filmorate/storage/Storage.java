@@ -10,7 +10,5 @@ public interface Storage<T> {
 
   T update(T object);
 
-  boolean delete(int id);
-
   Collection<T> findAll();
 }

@@ -4,7 +4,7 @@ drop table if exists FILM_GENRE cascade;
 drop table if exists FILM_LIKE cascade;
 drop table if exists FOLLOWER cascade;
 drop table if exists GENRE cascade;
-drop table if exists "user" cascade;
+drop table if exists USERS cascade;
 
 create table if not exists AGE_RATING
 (
@@ -61,7 +61,7 @@ create unique index if not exists FILM_GENRE_FILM_ID_GENRE_ID_UINDEX
 create unique index if not exists GENRE__UINDEX
     on GENRE (NAME);
 
-create table if not exists "user"
+create table if not exists USERS
 (
     USER_ID  BIGINT auto_increment,
     NAME     CHARACTER VARYING,
@@ -82,7 +82,7 @@ create table if not exists FILM_LIKE
     constraint FILM_LIKE_FILM_FILM_ID_FK
         foreign key (FILM_ID) references FILM,
     constraint FILM_LIKE_USER_USER_ID_FK
-        foreign key (USER_ID) references "user"
+        foreign key (USER_ID) references USERS
 );
 
 create unique index if not exists FILM_LIKE_FILM_ID_USER_ID_UINDEX
@@ -97,13 +97,13 @@ create table if not exists FOLLOWER
     constraint FOLLOWER_PK
         primary key (FOLLOWER_ID),
     constraint FOLLOWER_USER_USER_ID_FK
-        foreign key (FOLLOWING_USER_ID) references "user",
+        foreign key (FOLLOWING_USER_ID) references USERS,
     constraint FOLLOWER_USER_USER_ID_FK_2
-        foreign key (FOLLOWED_USER_ID) references "user"
+        foreign key (FOLLOWED_USER_ID) references USERS
 );
 
 create unique index if not exists FOLLOWER_FOLLOWED_USER_ID_FOLLOWING_USER_ID_UINDEX
     on FOLLOWER (FOLLOWED_USER_ID, FOLLOWING_USER_ID);
 
 create unique index if not exists USER_LOGIN_UINDEX
-    on "user" (LOGIN);
+    on USERS (LOGIN);

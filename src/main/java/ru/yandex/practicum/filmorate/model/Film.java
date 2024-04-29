@@ -31,4 +31,8 @@ public class Film {
   @Builder.Default
   private ArrayList<Genre> genres = new ArrayList<>();
   private final Set<Integer> likes = new HashSet<>();
+
+  public void addGenres(Genre genre) {
+    genres.add(genre);
+  }
 }

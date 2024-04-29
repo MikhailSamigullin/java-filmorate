@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import ru.yandex.practicum.filmorate.model.Follower;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
@@ -16,11 +15,11 @@ public interface UserDao {
 
   Optional<User> update(User user);
 
-  ArrayList<Follower> addFriend(int id, int friendId);
+  ArrayList<User> addFriend(int id, int friendId);
 
-  ArrayList<Follower> findFriends(int id);
+  ArrayList<User> findFriends(int id);
 
-  ArrayList<Follower> deleteFriend(int id, int friendId);
+  ArrayList<User> deleteFriend(int id, int friendId);
 
-  ArrayList<Follower> findCommonFriends(int id, int otherId);
+  ArrayList<User> findCommonFriends(int id, int otherId);
 }

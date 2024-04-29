@@ -11,9 +11,7 @@ import ru.yandex.practicum.filmorate.model.Genre;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Component
 public class FilmDaoImpl implements FilmDao {
@@ -64,6 +62,12 @@ public class FilmDaoImpl implements FilmDao {
     while (filmRow.next()) {
       films.add(buildFilm(filmRow));
     }
+    // Добавляем жанры к фильмам
+    SqlRowSet filmRowGenre = jdbcTemplate.queryForRowSet("select f.FILM_ID , g.GENRE_ID, g.NAME from FILM f join FILM_GENRE fg on fg.FILM_ID = f.FILM_ID left join GENRE g on fg.GENRE_ID = g.GENRE_ID;");
+    while (filmRowGenre.next()) {
+      Optional<Film> film = films.stream().filter(item -> item.getId() == filmRowGenre.getInt("FILM_ID")).findFirst();
+      film.ifPresent(value -> value.addGenres(new Genre(filmRowGenre.getInt("GENRE_ID"), filmRowGenre.getString("NAME"))));
+    }
     return films;
   }
 
@@ -73,6 +77,12 @@ public class FilmDaoImpl implements FilmDao {
     ArrayList<Film> films = new ArrayList<>();
     while (filmRow.next()) {
       films.add(buildFilm(filmRow));
+    }
+    // Добавляем жанры к фильмам
+    SqlRowSet filmRowGenre = jdbcTemplate.queryForRowSet("select f.FILM_ID , g.GENRE_ID, g.NAME from FILM f join FILM_GENRE fg on fg.FILM_ID = f.FILM_ID left join GENRE g on fg.GENRE_ID = g.GENRE_ID;");
+    while (filmRowGenre.next()) {
+      Optional<Film> film = films.stream().filter(item -> item.getId() == filmRowGenre.getInt("FILM_ID")).findFirst();
+      film.ifPresent(value -> value.addGenres(new Genre(filmRowGenre.getInt("GENRE_ID"), filmRowGenre.getString("NAME"))));
     }
     return films;
   }

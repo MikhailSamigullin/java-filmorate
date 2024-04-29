@@ -65,11 +65,6 @@ public class InMemoryUserStorage implements UserStorage {
   }
 
   @Override
-  public boolean delete(int id) {
-    return false;
-  }
-
-  @Override
   public User addFriend(int id, int friendId) {
     checkUserId(id);
     checkUserId(friendId);
