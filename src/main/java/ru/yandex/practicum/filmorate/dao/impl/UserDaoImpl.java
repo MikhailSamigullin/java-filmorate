@@ -55,7 +55,7 @@ public class UserDaoImpl implements UserDao {
     findUserById(String.valueOf(user.getId()));
     SqlRowSet userRow = jdbcTemplate.queryForRowSet(
             "SELECT * FROM final table (update \"user\" set NAME=?, LOGIN = ?, EMAIL = ?, BIRTHDAY = ? where USER_ID = ?);",
-            user.getName(), user.getEmail(), user.getLogin(), user.getBirthday(), user.getId());
+            user.getName(), user.getLogin(), user.getEmail(), user.getBirthday(), user.getId());
     if (!userRow.next()) {
       throw new NotExistsException("Такого id (" + user.getId() + ") пользователя не существует.");
     }

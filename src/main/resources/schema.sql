@@ -107,3 +107,18 @@ create unique index if not exists FOLLOWER_FOLLOWED_USER_ID_FOLLOWING_USER_ID_UI
 
 create unique index if not exists USER_LOGIN_UINDEX
     on "user" (LOGIN);
+
+insert into AGE_RATING(NAME)
+    values ('G'),
+            ('PG'),
+            ('PG-13'),
+            ('R'),
+            ('NC-17');
+
+insert into GENRE(NAME)
+    values ('Комедия'),
+           ('Драма'),
+           ('Мультфильм'),
+           ('Триллер'),
+           ('Документальный'),
+           ('Боевик');
