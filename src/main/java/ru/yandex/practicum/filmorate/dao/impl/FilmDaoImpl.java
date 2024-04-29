@@ -38,15 +38,17 @@ public class FilmDaoImpl implements FilmDao {
   public Optional<Film> create(Film film) {
     SqlRowSet filmRow = jdbcTemplate.queryForRowSet("select FILM_ID from FILM where NAME = ?;", film.getName());
     int filmId = 0;
-    if (!filmRow.next()) {
+    if (filmRow.next()) {
+      filmId = filmRow.getInt("FILM_ID");
+      film.setId(filmId);
+      update(film);
+    } else {
       jdbcTemplate.update("insert into FILM(NAME,DESCRIPTION, DURATION, RELEASE_DATE, AGE_RATING_ID) values (?,?,?,?,?)",
               film.getName(), film.getDescription(), film.getDuration(), film.getReleaseDate(), film.getMpa().getId());
       SqlRowSet filmRowFinal = jdbcTemplate.queryForRowSet("select FILM_ID from FILM where NAME = ?;", film.getName());
       if (filmRowFinal.next()) {
         filmId = filmRowFinal.getInt("FILM_ID");
       }
-    } else {
-      throw new NotExistsException("Фильм с названием " + film.getName() + " уже существует.");
     }
     Optional<Film> newFilm = findById(filmId);
     newFilm.ifPresent(value -> addGenre(value, film.getGenres()));
