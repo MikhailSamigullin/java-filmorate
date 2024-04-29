@@ -1,10 +1,10 @@
--- drop table if exists AGE_RATING cascade;
--- drop table if exists FILM cascade;
--- drop table if exists FILM_GENRE cascade;
--- drop table if exists FILM_LIKE cascade;
--- drop table if exists FOLLOWER cascade;
--- drop table if exists GENRE cascade;
--- drop table if exists "user" cascade;
+drop table if exists AGE_RATING cascade;
+drop table if exists FILM cascade;
+drop table if exists FILM_GENRE cascade;
+drop table if exists FILM_LIKE cascade;
+drop table if exists FOLLOWER cascade;
+drop table if exists GENRE cascade;
+drop table if exists "user" cascade;
 
 create table if not exists AGE_RATING
 (

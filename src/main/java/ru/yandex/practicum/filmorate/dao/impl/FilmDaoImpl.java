@@ -51,7 +51,9 @@ public class FilmDaoImpl implements FilmDao {
       }
     }
     Optional<Film> newFilm = findById(filmId);
-    newFilm.ifPresent(value -> addGenre(value, film.getGenres()));
+    if (film.getGenres() != null) {
+      newFilm.ifPresent(value -> addGenre(value, film.getGenres()));
+    }
     return findById(filmId);
   }
 
@@ -103,7 +105,7 @@ public class FilmDaoImpl implements FilmDao {
   }
 
   private ArrayList<Genre> findGenre(int id) {
-    SqlRowSet filmRow = jdbcTemplate.queryForRowSet("select g.GENRE_ID, g.NAME from FILM f left join FILM_GENRE fg on fg.FILM_ID = f.FILM_ID left join GENRE g on fg.GENRE_ID = g.GENRE_ID where f.FILM_ID = ?;", id);
+    SqlRowSet filmRow = jdbcTemplate.queryForRowSet("select g.GENRE_ID, g.NAME from FILM f join FILM_GENRE fg on fg.FILM_ID = f.FILM_ID left join GENRE g on fg.GENRE_ID = g.GENRE_ID where f.FILM_ID = ?;", id);
     ArrayList<Genre> genres = new ArrayList<>();
     while (filmRow.next()) {
       genres.add(new Genre(filmRow.getInt("GENRE_ID"), filmRow.getString("NAME")));
@@ -112,6 +114,11 @@ public class FilmDaoImpl implements FilmDao {
   }
 
   private void addGenre(Film film, ArrayList<Genre> genres) {
+    jdbcTemplate.update("delete from FILM_GENRE where FILM_ID = ?;",
+            film.getId());
+    if (genres == null) {
+      return;
+    }
     for (Genre genre : genres) {
       SqlRowSet filmRow = jdbcTemplate.queryForRowSet("select * from FILM_GENRE where FILM_ID = ? and GENRE_ID = ?;",
               film.getId(), genre.getId());
