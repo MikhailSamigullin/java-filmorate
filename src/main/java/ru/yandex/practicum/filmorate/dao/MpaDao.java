@@ -8,6 +8,7 @@ import java.util.Optional;
 public interface MpaDao {
 
   void findById400(int id);
+
   Optional<Mpa> findById404(int id);
 
   Optional<Mpa> create(Mpa genre);
