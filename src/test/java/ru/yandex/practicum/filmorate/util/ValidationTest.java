@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.model.User;
 
 import javax.validation.ConstraintViolation;
@@ -18,10 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ValidationTest {
 
   private static Validator validator;
+  private Mpa mpa;
 
   @BeforeEach
   public void setupValidatorInstance() {
     validator = Validation.buildDefaultValidatorFactory().getValidator();
+    mpa = new Mpa(1, "qwewe");
   }
 
   @Test
@@ -54,7 +57,14 @@ class ValidationTest {
 
   @Test
   public void whenEmptyNameConstraintViolations() {
-    Film film = new Film(0, "", "adipisicing", LocalDate.of(1967, 3, 25), 100);
+    Film film = Film.builder()
+            .id(1)
+            .name("")
+            .description("arsgrdgrg")
+            .releaseDate(LocalDate.of(1990, 1, 1))
+            .duration(90)
+            .mpa(mpa)
+            .build();
     Set<ConstraintViolation<Film>> violations = validator.validate(film);
     assertThat(violations.size()).isEqualTo(1);
   }
@@ -66,21 +76,42 @@ class ValidationTest {
             "ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in " +
             "voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non " +
             "proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    Film film = new Film(0, "nisi eiusmod", description, LocalDate.of(1967, 3, 25), 100);
+    Film film = Film.builder()
+            .id(1)
+            .name("efsefsefe")
+            .description(description)
+            .releaseDate(LocalDate.of(1990, 1, 1))
+            .duration(90)
+            .mpa(mpa)
+            .build();
     Set<ConstraintViolation<Film>> violations = validator.validate(film);
     assertThat(violations.size()).isEqualTo(1);
   }
 
   @Test
   public void whenReleaseDateConstraintViolations() {
-    Film film = new Film(0, "nisi eiusmod", "adipisicing", LocalDate.of(1800, 3, 25), 100);
+    Film film = Film.builder()
+            .id(1)
+            .name("rgththfh")
+            .description("arsgrdgrg")
+            .releaseDate(LocalDate.of(1790, 1, 1))
+            .duration(90)
+            .mpa(mpa)
+            .build();
     Set<ConstraintViolation<Film>> violations = validator.validate(film);
     assertThat(violations.size()).isEqualTo(1);
   }
 
   @Test
   public void whenDurationConstraintViolations() {
-    Film film = new Film(0, "nisi eiusmod", "adipisicing", LocalDate.of(1967, 3, 25), 0);
+    Film film = Film.builder()
+            .id(1)
+            .name("rgththfh")
+            .description("arsgrdgrg")
+            .releaseDate(LocalDate.of(1990, 1, 1))
+            .duration(0)
+            .mpa(mpa)
+            .build();
     Set<ConstraintViolation<Film>> violations = validator.validate(film);
     assertThat(violations.size()).isEqualTo(1);
   }

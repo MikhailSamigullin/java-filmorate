@@ -8,6 +8,7 @@ import ru.yandex.practicum.filmorate.service.UserService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -26,8 +27,8 @@ public class UserController {
   }
 
   @GetMapping("{id}")
-  public User findById(@PathVariable int id) {
-    return userService.findById(id);
+  public Optional<User> findById(@PathVariable String id) {
+    return userService.findUserById(id);
   }
 
   @GetMapping("/{id}/friends")
@@ -41,22 +42,22 @@ public class UserController {
   }
 
   @PostMapping
-  public User create(@Valid @RequestBody User user) {
+  public Optional<User> create(@Valid @RequestBody User user) {
     return userService.create(user);
   }
 
   @PutMapping
-  public User update(@Valid @RequestBody User user) {
+  public Optional<User> update(@Valid @RequestBody User user) {
     return userService.update(user);
   }
 
   @PutMapping("/{id}/friends/{friendId}")
-  public User addFriend(@PathVariable int id, @PathVariable  int friendId) {
+  public ArrayList<User> addFriend(@PathVariable int id, @PathVariable  int friendId) {
     return userService.addFriend(id, friendId);
   }
 
   @DeleteMapping("/{id}/friends/{friendId}")
-  public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+  public ArrayList<User> deleteFriend(@PathVariable int id, @PathVariable int friendId) {
     return userService.deleteFriend(id, friendId);
   }
 

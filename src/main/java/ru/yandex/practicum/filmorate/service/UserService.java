@@ -1,59 +1,58 @@
 package ru.yandex.practicum.filmorate.service;
 
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.dao.UserDao;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.ArrayList;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
-  private final UserStorage userStorage;
+  private final UserDao userDao;
 
-  public UserService(UserStorage userStorage) {
-    this.userStorage = userStorage;
+  public UserService(UserDao userDao) {
+    this.userDao = userDao;
   }
 
   public ArrayList<User> findAll() {
-    return userStorage.findAll();
+    return userDao.findAll();
   }
 
-  public User findById(int id) {
-    userStorage.checkUserId(id);
-    return userStorage.findById(id);
+  public Optional<User> findUserById(String id) {
+    return userDao.findUserById(id);
   }
 
   public ArrayList<User> findFriendsByUserId(int id) {
-    userStorage.checkUserId(id);
-    return userStorage.findFriends(id);
-
+    userDao.findUserById(String.valueOf(id));
+    return userDao.findFriends(id);
   }
 
   public ArrayList<User> findCommonFriends(int id, int otherId) {
-    userStorage.checkUserId(id);
-    userStorage.checkUserId(otherId);
-    return userStorage.findCommonFriends(id, otherId);
+    userDao.findUserById(String.valueOf(id));
+    userDao.findUserById(String.valueOf(otherId));
+    return userDao.findCommonFriends(id, otherId);
   }
 
-  public User create(User user) {
-    return userStorage.create(user);
+  public Optional<User> create(User user) {
+    return userDao.create(user);
   }
 
-  public User update(User user) {
-    userStorage.checkUserId(user.getId());
-    return userStorage.update(user);
+  public Optional<User> update(User user) {
+    return userDao.update(user);
   }
 
-  public User addFriend(int id, int friendId) {
-    userStorage.checkUserId(id);
-    userStorage.checkUserId(friendId);
-    return userStorage.addFriend(id, friendId);
+  public ArrayList<User> addFriend(int id, int friendId) {
+    userDao.findUserById(String.valueOf(id));
+    userDao.findUserById(String.valueOf(friendId));
+    return userDao.addFriend(id, friendId);
   }
 
-  public User deleteFriend(int id, int friendId) {
-    userStorage.checkUserId(id);
-    userStorage.checkUserId(friendId);
-    return userStorage.deleteFriend(id, friendId);
+  public ArrayList<User> deleteFriend(int id, int friendId) {
+    userDao.findUserById(String.valueOf(id));
+    userDao.findUserById(String.valueOf(friendId));
+    return userDao.deleteFriend(id, friendId);
   }
 
 }
